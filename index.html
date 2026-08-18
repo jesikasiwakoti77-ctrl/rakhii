@@ -6,27 +6,17 @@
   <title>For My Sister 💕</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: #0a0010;
-      overflow: hidden;
-      font-family: 'Georgia', serif;
-    }
-
+    body { background: #0a0010; overflow: hidden; font-family: 'Georgia', serif; }
     canvas { display: block; }
 
-    /* Title overlay */
+    /* ── TITLE SCREEN ── */
     #title-screen {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
       background: radial-gradient(ellipse at center, #1a0030 0%, #000005 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      transition: opacity 2s ease;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 100; transition: opacity 2s ease;
     }
     #title-screen h1 {
       font-size: clamp(2rem, 6vw, 4.5rem);
@@ -34,190 +24,416 @@
       text-shadow: 0 0 30px #ff80c8, 0 0 60px #ff40a0;
       letter-spacing: 4px;
       animation: pulse 2s ease-in-out infinite;
-      text-align: center;
-      padding: 0 20px;
+      text-align: center; padding: 0 20px;
     }
     #title-screen p {
-      margin-top: 20px;
+      margin-top: 18px;
       font-size: clamp(1rem, 2.5vw, 1.4rem);
-      color: #ffb3e0;
-      letter-spacing: 2px;
-      text-align: center;
-      padding: 0 20px;
+      color: #ffb3e0; letter-spacing: 2px;
+      text-align: center; padding: 0 20px;
     }
     #title-screen .subtitle {
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: clamp(0.85rem, 2vw, 1.1rem);
-      color: #cc80bb;
-      font-style: italic;
+      color: #cc80bb; font-style: italic;
     }
     #start-btn {
-      margin-top: 40px;
-      padding: 14px 42px;
-      font-size: 1.1rem;
-      color: #fff;
+      margin-top: 40px; padding: 14px 44px;
+      font-size: 1.1rem; color: #fff;
       background: linear-gradient(135deg, #c0006a, #8800cc);
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
+      border: none; border-radius: 50px; cursor: pointer;
       letter-spacing: 2px;
       box-shadow: 0 0 30px #ff40a088;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    #start-btn:hover {
-      transform: scale(1.07);
-      box-shadow: 0 0 50px #ff40a0bb;
-    }
+    #start-btn:hover { transform: scale(1.07); box-shadow: 0 0 50px #ff40a0bb; }
 
     @keyframes pulse {
-      0%, 100% { text-shadow: 0 0 20px #ff80c8, 0 0 50px #ff40a0; }
-      50%       { text-shadow: 0 0 40px #ffb3e0, 0 0 90px #ff80c8; }
+      0%,100% { text-shadow: 0 0 20px #ff80c8, 0 0 50px #ff40a0; }
+      50%      { text-shadow: 0 0 40px #ffb3e0, 0 0 90px #ff80c8; }
     }
 
-    /* Floating message bubbles */
+    /* ── CHAT BUBBLES ── */
     .bubble {
       position: fixed;
-      background: rgba(255,255,255,0.92);
-      border-radius: 18px;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      color: #5a005a;
+      background: rgba(255,255,255,0.93);
+      border-radius: 18px; padding: 10px 18px;
+      font-size: 0.95rem; color: #5a005a;
       box-shadow: 0 4px 20px rgba(200,0,150,0.25);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      max-width: 220px;
-      text-align: center;
-      z-index: 50;
-      border: 1.5px solid #ffaadd;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.6s ease;
+      max-width: 220px; text-align: center;
+      z-index: 50; border: 1.5px solid #ffaadd;
     }
     .bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 20px;
+      content: ''; position: absolute;
+      bottom: -10px; left: 22px;
       border-width: 10px 8px 0;
       border-style: solid;
-      border-color: rgba(255,255,255,0.92) transparent transparent;
+      border-color: rgba(255,255,255,0.93) transparent transparent;
     }
-    .bubble.right::after {
-      left: auto;
-      right: 20px;
+    .bubble.right::after { left: auto; right: 22px; }
+
+    /* ── SOUND CONTROLS ── */
+    #sound-bar {
+      position: fixed; top: 18px; right: 18px;
+      display: flex; align-items: center; gap: 10px;
+      z-index: 60; background: rgba(60,0,50,0.7);
+      border: 1px solid #ff80c855; border-radius: 30px;
+      padding: 8px 18px; backdrop-filter: blur(6px);
+    }
+    #sound-bar span {
+      color: #ffb3e0; font-size: 0.85rem; letter-spacing: 1px;
+    }
+    #mute-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.3rem; line-height: 1;
+      transition: transform 0.15s;
+    }
+    #mute-btn:hover { transform: scale(1.2); }
+    #vol-slider {
+      -webkit-appearance: none;
+      width: 80px; height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(to right, #ff60b0, #3a0030);
+      outline: none; cursor: pointer;
+    }
+    #vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%; background: #ff60b0;
+      box-shadow: 0 0 6px #ff40a0;
     }
 
-    /* Corner message */
+    /* ── CORNER HINT ── */
     #corner-msg {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 20px; left: 50%;
       transform: translateX(-50%);
-      color: #ffb3e0;
-      font-size: clamp(0.8rem, 1.8vw, 1rem);
-      letter-spacing: 1.5px;
-      text-align: center;
-      opacity: 0.7;
-      z-index: 50;
-      pointer-events: none;
-      font-style: italic;
+      color: #ffb3e0; font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+      letter-spacing: 1.5px; text-align: center;
+      opacity: 0.65; z-index: 50;
+      pointer-events: none; font-style: italic;
     }
 
-    /* Heart burst canvas overlay */
+    /* ── HEART OVERLAY ── */
     #heart-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 40;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 40;
     }
 
-    /* Name tags */
+    /* ── NAME TAGS ── */
     .nametag {
       position: fixed;
-      color: #ffe0f5;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
+      color: #ffe0f5; font-size: 0.85rem; letter-spacing: 1px;
       text-shadow: 0 0 10px #ff60b0;
-      pointer-events: none;
-      z-index: 45;
-      background: rgba(80,0,60,0.5);
-      padding: 3px 10px;
-      border-radius: 10px;
+      pointer-events: none; z-index: 45;
+      background: rgba(80,0,60,0.55);
+      padding: 3px 12px; border-radius: 10px;
       border: 1px solid #ff80c888;
+    }
+
+    /* ── LAUGH BURST ── */
+    .laugh-burst {
+      position: fixed; pointer-events: none; z-index: 55;
+      font-size: 1.5rem; font-weight: bold;
+      color: #ff40a0; text-shadow: 0 0 10px #ff80c8;
+      animation: burstOut 1.2s ease-out forwards;
+    }
+    @keyframes burstOut {
+      0%   { opacity:1; transform: scale(0.5) translateY(0); }
+      60%  { opacity:1; transform: scale(1.4) translateY(-30px); }
+      100% { opacity:0; transform: scale(1.6) translateY(-60px); }
     }
   </style>
 </head>
 <body>
 
-<!-- Title Screen -->
+<!-- ══ TITLE SCREEN ══ -->
 <div id="title-screen">
-  <h1>💕 For My Dearest Sister 💕</h1>
-  <p>Those days we laughed until our stomachs hurt...</p>
-  <p class="subtitle">Chatting all day, sharing every little secret 🌸</p>
-  <button id="start-btn" onclick="startAnimation()">▶ Relive the Memories</button>
+  <h1>💕 To My Dearest Sister 💕</h1>
+  <p>Two sisters, one home, endless laughter...</p>
+  <p class="subtitle">Those whole days chatting, giggling, and making memories 🌸</p>
+  <button id="start-btn" onclick="startAnimation()">▶ Relive Our Memories</button>
 </div>
 
-<!-- Heart particle canvas -->
+<!-- Heart overlay canvas -->
 <canvas id="heart-canvas"></canvas>
 
-<!-- Chat bubbles -->
-<div class="bubble" id="bubble1" style="left:12%; top:28%;">hahaha remember that day?! 😂</div>
-<div class="bubble right" id="bubble2" style="right:12%; top:28%;">OMG yes!! I can't stop laughing 🤣</div>
-<div class="bubble" id="bubble3" style="left:10%; top:52%;">We were literally on the floor!! 😭💀</div>
-<div class="bubble right" id="bubble4" style="right:10%; top:52%;">The best day ever!! ❤️</div>
-<div class="bubble" id="bubble5" style="left:14%; top:70%;">I miss those nights... 🌙</div>
-<div class="bubble right" id="bubble6" style="right:14%; top:70%;">Me too sisss 💕</div>
+<!-- Chat bubbles — sister 1 (left) -->
+<div class="bubble" id="b1" style="left:11%; top:26%;">hahaha do you remember that!! 😂</div>
+<div class="bubble" id="b3" style="left:9%;  top:50%;">We laughed SO hard 😭💕</div>
+<div class="bubble" id="b5" style="left:12%; top:68%;">I miss those cozy nights... 🌙</div>
 
-<!-- Name tags (positioned by JS) -->
-<div class="nametag" id="tag1" style="display:none;">Me 👦</div>
-<div class="nametag" id="tag2" style="display:none;">Sis 👧</div>
+<!-- Chat bubbles — sister 2 (right) -->
+<div class="bubble right" id="b2" style="right:11%; top:26%;">OMG YES I can't even!! 🤣</div>
+<div class="bubble right" id="b4" style="right:9%;  top:50%;">Best days of my life ❤️</div>
+<div class="bubble right" id="b6" style="right:12%; top:68%;">Me too siss, always 💕</div>
 
-<!-- Corner message -->
-<div id="corner-msg">Use mouse to orbit the scene ✦ Scroll to zoom</div>
+<!-- Name tags -->
+<div class="nametag" id="tag1" style="display:none;">Didi 👧✨</div>
+<div class="nametag" id="tag2" style="display:none;">Choti 👧🌸</div>
 
-<!-- Three.js CDN -->
+<!-- Sound controls -->
+<div id="sound-bar">
+  <span>🎵 Our Song</span>
+  <button id="mute-btn" title="Mute/Unmute">🔊</button>
+  <input id="vol-slider" type="range" min="0" max="1" step="0.01" value="0.5">
+</div>
+
+<!-- Hint -->
+<div id="corner-msg">Drag to orbit ✦ Scroll to zoom ✦ Sounds play automatically 🎶</div>
+
+<!-- Three.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-// ─────────────────────────────────────────────
-//  HEART PARTICLE SYSTEM  (2D canvas overlay)
-// ─────────────────────────────────────────────
+'use strict';
+
+// ══════════════════════════════════════════════
+//  WEB AUDIO ENGINE
+// ══════════════════════════════════════════════
+let audioCtx = null;
+let masterGain = null;
+let musicLoop = null;
+let isMuted = false;
+let audioReady = false;
+
+function initAudio() {
+  if (audioReady) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.5;
+  masterGain.connect(audioCtx.destination);
+
+  startBgMusic();
+  audioReady = true;
+}
+
+// ── Background music: gentle looping melody ──
+function startBgMusic() {
+  if (!audioCtx) return;
+
+  // Notes for a sweet, cozy melody (Hz)
+  // Inspired by a simple waltz-like tune
+  const melody = [
+    // Bar 1
+    { f: 523.25, d: 0.35 }, // C5
+    { f: 659.25, d: 0.35 }, // E5
+    { f: 783.99, d: 0.35 }, // G5
+    { f: 659.25, d: 0.35 }, // E5
+    { f: 523.25, d: 0.35 }, // C5
+    { f: 0,      d: 0.15 }, // rest
+    // Bar 2
+    { f: 493.88, d: 0.35 }, // B4
+    { f: 587.33, d: 0.35 }, // D5
+    { f: 739.99, d: 0.35 }, // F#5
+    { f: 587.33, d: 0.35 }, // D5
+    { f: 493.88, d: 0.35 }, // B4
+    { f: 0,      d: 0.15 },
+    // Bar 3
+    { f: 440.00, d: 0.35 }, // A4
+    { f: 523.25, d: 0.35 }, // C5
+    { f: 659.25, d: 0.35 }, // E5
+    { f: 783.99, d: 0.35 }, // G5
+    { f: 880.00, d: 0.35 }, // A5
+    { f: 0,      d: 0.15 },
+    // Bar 4 (resolve)
+    { f: 783.99, d: 0.35 }, // G5
+    { f: 659.25, d: 0.35 }, // E5
+    { f: 523.25, d: 0.50 }, // C5
+    { f: 0,      d: 0.30 },
+  ];
+
+  // Harmony (lower octave, softer)
+  const harmony = [
+    { f: 261.63, d: 0.70 }, // C4
+    { f: 261.63, d: 0.70 },
+    { f: 246.94, d: 0.70 }, // B3
+    { f: 246.94, d: 0.70 },
+    { f: 220.00, d: 0.70 }, // A3
+    { f: 220.00, d: 0.70 },
+    { f: 261.63, d: 1.10 }, // C4
+    { f: 0,      d: 0.30 },
+  ];
+
+  function playNote(freq, dur, startTime, gainVal = 0.18, type = 'sine') {
+    if (freq === 0) return;
+    const osc = audioCtx.createOscillator();
+    const env = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    env.gain.setValueAtTime(0, startTime);
+    env.gain.linearRampToValueAtTime(gainVal, startTime + 0.02);
+    env.gain.exponentialRampToValueAtTime(gainVal * 0.6, startTime + dur * 0.5);
+    env.gain.exponentialRampToValueAtTime(0.001, startTime + dur * 0.95);
+    osc.connect(env);
+    env.connect(masterGain);
+    osc.start(startTime);
+    osc.stop(startTime + dur);
+  }
+
+  // Add a soft pad / reverb-like shimmer with triangle waves
+  function playPad(freq, dur, startTime) {
+    if (freq === 0) return;
+    const osc = audioCtx.createOscillator();
+    const env = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    env.gain.setValueAtTime(0, startTime);
+    env.gain.linearRampToValueAtTime(0.07, startTime + 0.15);
+    env.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+    osc.connect(env);
+    env.connect(masterGain);
+    osc.start(startTime);
+    osc.stop(startTime + dur + 0.1);
+  }
+
+  // Schedule the full melody once and return total duration
+  function scheduleMelody(startTime) {
+    let t = startTime;
+    melody.forEach(n => {
+      playNote(n.f, n.d, t, 0.18, 'sine');
+      if (n.f > 0) playPad(n.f * 0.5, n.d * 1.5, t); // octave below shimmer
+      t += n.d;
+    });
+    return t - startTime;
+  }
+
+  function scheduleHarmony(startTime) {
+    let t = startTime;
+    harmony.forEach(n => {
+      playNote(n.f, n.d, t, 0.09, 'triangle');
+      t += n.d;
+    });
+  }
+
+  // Total melody duration
+  const melodyDur = melody.reduce((s, n) => s + n.d, 0);
+
+  // Loop forever
+  function scheduleLoop(startTime) {
+    scheduleMelody(startTime);
+    scheduleHarmony(startTime);
+    // schedule gentle bell accents
+    playNote(1046.50, 0.3, startTime + 0.7, 0.08, 'sine');   // C6
+    playNote(1318.51, 0.3, startTime + 2.1, 0.06, 'sine');   // E6
+    playNote(1567.98, 0.3, startTime + 4.2, 0.05, 'sine');   // G6
+    setTimeout(() => { scheduleLoop(audioCtx.currentTime + 0.05); }, (melodyDur - 0.3) * 1000);
+  }
+
+  scheduleLoop(audioCtx.currentTime + 0.1);
+}
+
+// ── Giggle / Laugh sound burst ──
+function playLaughSound() {
+  if (!audioCtx || isMuted) return;
+  const t = audioCtx.currentTime;
+  // Quick ascending chirps = giggle
+  [0, 0.07, 0.14, 0.22, 0.30].forEach((offset, i) => {
+    const osc = audioCtx.createOscillator();
+    const env = audioCtx.createGain();
+    const baseFreq = 600 + i * 120 + Math.random() * 80;
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(baseFreq, t + offset);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, t + offset + 0.06);
+    env.gain.setValueAtTime(0, t + offset);
+    env.gain.linearRampToValueAtTime(0.12, t + offset + 0.01);
+    env.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.08);
+    osc.connect(env);
+    env.connect(masterGain);
+    osc.start(t + offset);
+    osc.stop(t + offset + 0.1);
+  });
+}
+
+// ── Soft chime when heart floats up ──
+function playChime() {
+  if (!audioCtx || isMuted) return;
+  const t = audioCtx.currentTime;
+  const freqs = [1046.5, 1318.5, 1567.98]; // C6 E6 G6
+  const pick = freqs[Math.floor(Math.random() * freqs.length)];
+  const osc = audioCtx.createOscillator();
+  const env = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = pick;
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(0.06, t + 0.01);
+  env.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+  osc.connect(env);
+  env.connect(masterGain);
+  osc.start(t);
+  osc.stop(t + 0.55);
+}
+
+// ── Bubble "pop" when chat appears ──
+function playPop() {
+  if (!audioCtx || isMuted) return;
+  const t = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const env = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(800, t);
+  osc.frequency.exponentialRampToValueAtTime(200, t + 0.12);
+  env.gain.setValueAtTime(0.14, t);
+  env.gain.exponentialRampToValueAtTime(0.001, t + 0.13);
+  osc.connect(env);
+  env.connect(masterGain);
+  osc.start(t);
+  osc.stop(t + 0.15);
+}
+
+// Volume / mute controls
+document.getElementById('mute-btn').addEventListener('click', () => {
+  if (!audioCtx) return;
+  isMuted = !isMuted;
+  masterGain.gain.value = isMuted ? 0 : parseFloat(document.getElementById('vol-slider').value);
+  document.getElementById('mute-btn').textContent = isMuted ? '🔇' : '🔊';
+});
+document.getElementById('vol-slider').addEventListener('input', e => {
+  if (!audioCtx) return;
+  masterGain.gain.value = isMuted ? 0 : parseFloat(e.target.value);
+});
+
+
+// ══════════════════════════════════════════════
+//  HEART PARTICLE SYSTEM (2D canvas overlay)
+// ══════════════════════════════════════════════
 const hCanvas = document.getElementById('heart-canvas');
 const hCtx = hCanvas.getContext('2d');
 let hearts = [];
 let animStarted = false;
+let chimeTimer = 0;
 
-function resizeHeartCanvas() {
-  hCanvas.width = window.innerWidth;
-  hCanvas.height = window.innerHeight;
-}
-resizeHeartCanvas();
-window.addEventListener('resize', resizeHeartCanvas);
+function resizeHC() { hCanvas.width = window.innerWidth; hCanvas.height = window.innerHeight; }
+resizeHC();
+window.addEventListener('resize', resizeHC);
 
 function spawnHeart() {
-  const colors = ['#ff80c8','#ff40a0','#ffb3e0','#ff6ed8','#ffd6f0','#ff99cc'];
+  const colors = ['#ff80c8','#ff40a0','#ffb3e0','#ff6ed8','#ffd6f0','#ff99cc','#ff55bb'];
   hearts.push({
     x: Math.random() * window.innerWidth,
     y: window.innerHeight + 20,
     size: 10 + Math.random() * 22,
-    speed: 0.6 + Math.random() * 1.2,
-    drift: (Math.random() - 0.5) * 0.8,
-    opacity: 0.6 + Math.random() * 0.4,
+    speed: 0.5 + Math.random() * 1.1,
+    drift: (Math.random() - 0.5) * 0.9,
+    opacity: 0.65 + Math.random() * 0.35,
     color: colors[Math.floor(Math.random() * colors.length)],
     wobble: Math.random() * Math.PI * 2,
-    wobbleSpeed: 0.02 + Math.random() * 0.03
+    wobbleSpeed: 0.018 + Math.random() * 0.028
   });
 }
 
-function drawHeart(ctx, x, y, size, color, opacity) {
+function drawHeart(ctx, x, y, sz, color, alpha) {
   ctx.save();
-  ctx.globalAlpha = opacity;
+  ctx.globalAlpha = alpha;
   ctx.fillStyle = color;
   ctx.shadowColor = color;
-  ctx.shadowBlur = 12;
+  ctx.shadowBlur = 14;
   ctx.beginPath();
   ctx.moveTo(x, y);
-  ctx.bezierCurveTo(x, y - size*0.3, x - size*0.5, y - size*0.8, x - size*0.5, y - size*0.5);
-  ctx.bezierCurveTo(x - size*0.5, y - size*1.1, x + size*0.5, y - size*1.1, x + size*0.5, y - size*0.5);
-  ctx.bezierCurveTo(x + size*0.5, y - size*0.8, x, y - size*0.3, x, y);
+  ctx.bezierCurveTo(x,       y-sz*0.3,  x-sz*0.5, y-sz*0.8,  x-sz*0.5, y-sz*0.5);
+  ctx.bezierCurveTo(x-sz*0.5,y-sz*1.1,  x+sz*0.5, y-sz*1.1,  x+sz*0.5, y-sz*0.5);
+  ctx.bezierCurveTo(x+sz*0.5,y-sz*0.8,  x,        y-sz*0.3,  x, y);
   ctx.closePath();
   ctx.fill();
   ctx.restore();
@@ -225,23 +441,24 @@ function drawHeart(ctx, x, y, size, color, opacity) {
 
 function animateHearts() {
   hCtx.clearRect(0, 0, hCanvas.width, hCanvas.height);
-  hearts.forEach((h, i) => {
+  hearts.forEach(h => {
     h.y -= h.speed;
     h.wobble += h.wobbleSpeed;
     h.x += Math.sin(h.wobble) * h.drift;
-    h.opacity -= 0.002;
+    h.opacity -= 0.0018;
     drawHeart(hCtx, h.x, h.y, h.size, h.color, h.opacity);
   });
-  hearts = hearts.filter(h => h.opacity > 0 && h.y > -50);
+  hearts = hearts.filter(h => h.opacity > 0 && h.y > -60);
   requestAnimationFrame(animateHearts);
 }
 animateHearts();
 
-// ─────────────────────────────────────────────
-//  THREE.JS  SCENE
-// ─────────────────────────────────────────────
+
+// ══════════════════════════════════════════════
+//  THREE.JS SCENE
+// ══════════════════════════════════════════════
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x1a0030, 0.045);
+scene.fog = new THREE.FogExp2(0x1a0030, 0.042);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -261,591 +478,482 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ── HELPERS ──────────────────────────────────
-function box(w, h, d, color, emissive=0x000000, emissiveInt=0) {
-  const g = new THREE.BoxGeometry(w, h, d);
-  const m = new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity: emissiveInt });
-  return new THREE.Mesh(g, m);
+// ── HELPERS ──
+function box(w, h, d, color, emissive = 0x000000, eInt = 0) {
+  return new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, d),
+    new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity: eInt })
+  );
 }
-function cyl(rt, rb, h, segs, color) {
-  const g = new THREE.CylinderGeometry(rt, rb, h, segs);
-  const m = new THREE.MeshStandardMaterial({ color });
-  return new THREE.Mesh(g, m);
+function cyl(rt, rb, h, segs, color, emissive = 0x000000, eInt = 0) {
+  return new THREE.Mesh(
+    new THREE.CylinderGeometry(rt, rb, h, segs),
+    new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity: eInt })
+  );
 }
-function sphere(r, segs, color, emissive=0x000000, eInt=0) {
-  const g = new THREE.SphereGeometry(r, segs, segs);
-  const m = new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity: eInt });
-  return new THREE.Mesh(g, m);
+function sph(r, segs, color, emissive = 0x000000, eInt = 0) {
+  return new THREE.Mesh(
+    new THREE.SphereGeometry(r, segs, segs),
+    new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity: eInt })
+  );
+}
+function add(mesh, rx=0, ry=0, rz=0) {
+  mesh.rotation.set(rx, ry, rz);
+  scene.add(mesh);
+  return mesh;
 }
 
-// ── ROOM ──────────────────────────────────────
+
+// ══════════════════════════════════════════════
+//  ROOM
+// ══════════════════════════════════════════════
 // Floor
-const floor = box(16, 0.2, 12, 0x3b1f2b);
-floor.position.set(0, -0.1, 0);
-floor.receiveShadow = true;
-scene.add(floor);
-
-// Floor pattern (rug)
-const rug = box(6, 0.05, 4, 0x7a2060);
-rug.position.set(0, 0.02, 0.5);
-rug.receiveShadow = true;
-scene.add(rug);
-
-const rugBorder = box(6.2, 0.04, 4.2, 0xd06090);
-rugBorder.position.set(0, 0.01, 0.5);
-scene.add(rugBorder);
-
+const floor = box(16, 0.2, 12, 0x3b1f2b); floor.position.set(0,-0.1,0); floor.receiveShadow=true; scene.add(floor);
+// Rug
+const rug = box(6.2,0.04,4.2,0xd06090); rug.position.set(0,0.01,0.5); scene.add(rug);
+const rugInner = box(5.8,0.06,3.8,0x7a2060); rugInner.position.set(0,0.02,0.5); scene.add(rugInner);
 // Back wall
-const backWall = box(16, 8, 0.2, 0x2a1020);
-backWall.position.set(0, 3.9, -5.9);
-backWall.receiveShadow = true;
-scene.add(backWall);
-
+const bwall = box(16,8,0.2,0x2a1020); bwall.position.set(0,3.9,-5.9); bwall.receiveShadow=true; scene.add(bwall);
 // Side walls
-const wallL = box(0.2, 8, 12, 0x251020);
-wallL.position.set(-7.9, 3.9, 0);
-scene.add(wallL);
-
-const wallR = box(0.2, 8, 12, 0x251020);
-wallR.position.set(7.9, 3.9, 0);
-scene.add(wallR);
-
+const wl = box(0.2,8,12,0x251020); wl.position.set(-7.9,3.9,0); scene.add(wl);
+const wr = box(0.2,8,12,0x251020); wr.position.set( 7.9,3.9,0); scene.add(wr);
 // Ceiling
-const ceiling = box(16, 0.2, 12, 0x200818);
-ceiling.position.set(0, 7.9, 0);
-scene.add(ceiling);
+const ceil = box(16,0.2,12,0x200818); ceil.position.set(0,7.9,0); scene.add(ceil);
 
-// ── WINDOW (back wall) ────────────────────────
-const windowFrame = box(2.6, 2.6, 0.15, 0x5a3040);
-windowFrame.position.set(0, 4, -5.82);
-scene.add(windowFrame);
-// Window glass glow
-const windowGlass = box(2.2, 2.2, 0.05, 0x88ccff, 0x88ccff, 0.35);
-windowGlass.position.set(0, 4, -5.80);
-scene.add(windowGlass);
-// Moon
-const moon = sphere(0.35, 16, 0xfffbe8, 0xfffbe8, 1.5);
-moon.position.set(0.5, 4.5, -5.75);
-scene.add(moon);
-// Stars around window
-for (let i = 0; i < 30; i++) {
-  const star = sphere(0.025, 6, 0xffffff, 0xffffff, 2);
-  star.position.set(
-    (Math.random()-0.5)*2 + 0,
-    3.2 + Math.random()*1.6,
-    -5.77
-  );
-  scene.add(star);
-}
-
-// ── WALL DECORATIONS ─────────────────────────
-// Heart wall art (left wall)
-function makeWallHeart(px, py, pz, size, color) {
-  const g = new THREE.TorusGeometry(size*0.3, size*0.12, 8, 12, Math.PI);
-  const m = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.5 });
-  const lobe1 = new THREE.Mesh(g, m);
-  lobe1.position.set(px - size*0.3, py, pz);
-  lobe1.rotation.z = Math.PI;
-  scene.add(lobe1);
-  const lobe2 = new THREE.Mesh(g, m);
-  lobe2.position.set(px + size*0.3, py, pz);
-  lobe2.rotation.z = Math.PI;
-  scene.add(lobe2);
-  const cone = new THREE.ConeGeometry(size*0.42, size*0.6, 4);
-  const tip = new THREE.Mesh(cone, m);
-  tip.position.set(px, py - size*0.45, pz);
-  tip.rotation.z = Math.PI/4;
-  scene.add(tip);
-}
-makeWallHeart(-6.5, 4.5, -1, 0.5, 0xff4499);
-makeWallHeart(-6.5, 3.2, 1, 0.35, 0xff80c8);
-
-// Photo frames on back wall
-function makeFrame(x, y, z, col) {
-  const frame = box(1.1, 1.4, 0.08, 0x6b3a50);
-  frame.position.set(x, y, z);
-  scene.add(frame);
-  const photo = box(0.85, 1.1, 0.05, col, col, 0.15);
-  photo.position.set(x, y, z + 0.02);
-  scene.add(photo);
-}
-makeFrame(-3.2, 4.8, -5.78, 0xffd6e8);
-makeFrame(-1.8, 4.8, -5.78, 0xc8e0ff);
-makeFrame( 1.8, 4.8, -5.78, 0xd4f0c0);
-makeFrame( 3.2, 4.8, -5.78, 0xffecc0);
-
-// String lights on ceiling (back)
-for (let i = -6; i <= 6; i += 0.7) {
-  const bulb = sphere(0.06, 6, 0xffeeaa, 0xffeeaa, 2.5);
-  bulb.position.set(i, 7.6, -4 + Math.sin(i)*0.4);
-  scene.add(bulb);
-}
-
-// ── SOFA (center) ────────────────────────────
-const sofaBase = box(4.2, 0.55, 1.8, 0x7a2050);
-sofaBase.position.set(0, 0.275, -0.3);
-sofaBase.castShadow = true; sofaBase.receiveShadow = true;
-scene.add(sofaBase);
-
-const sofaBack = box(4.2, 1.1, 0.45, 0x8a2860);
-sofaBack.position.set(0, 1.1, -1.15);
-sofaBack.castShadow = true;
-scene.add(sofaBack);
-
-// Sofa arms
-const sofaArmL = box(0.42, 0.75, 1.8, 0x8a2860);
-sofaArmL.position.set(-2.3, 0.375, -0.3);
-scene.add(sofaArmL);
-const sofaArmR = box(0.42, 0.75, 1.8, 0x8a2860);
-sofaArmR.position.set(2.3, 0.375, -0.3);
-scene.add(sofaArmR);
-
-// Cushions
-const cushColors = [0xff80c8, 0xffb3e0, 0xc060a0, 0xdd70b0];
-[-1.3, -0.3, 0.7, 1.6].forEach((cx, i) => {
-  const cush = box(0.75, 0.4, 0.7, cushColors[i]);
-  cush.position.set(cx, 0.75, -0.7);
-  cush.rotation.y = (Math.random()-0.5)*0.3;
-  scene.add(cush);
-});
-
-// ── COFFEE TABLE ──────────────────────────────
-const table = box(2.2, 0.12, 1.1, 0x5a3030);
-table.position.set(0, 0.45, 1.6);
-table.receiveShadow = true;
-scene.add(table);
-// Table legs
-[[-0.9, 1.1],[0.9, 1.1],[-0.9, 2.1],[0.9, 2.1]].forEach(([tx,tz]) => {
-  const leg = box(0.1, 0.45, 0.1, 0x4a2020);
-  leg.position.set(tx, 0.22, tz);
-  scene.add(leg);
-});
-
-// Tea cups on table
-function makeCup(x, z, color) {
-  const cup = cyl(0.1, 0.08, 0.18, 12, color);
-  cup.position.set(x, 0.57, z);
-  scene.add(cup);
-  const liquid = cyl(0.09, 0.09, 0.04, 12, 0x6b3010);
-  liquid.position.set(x, 0.65, z);
-  scene.add(liquid);
-  // saucer
-  const saucer = cyl(0.15, 0.13, 0.03, 12, 0xe8d8c8);
-  saucer.position.set(x, 0.50, z);
-  scene.add(saucer);
-  // steam
-  for (let si = 0; si < 2; si++) {
-    const steam = box(0.025, 0.18, 0.025, 0xffffff, 0xffffff, 1.5);
-    steam.position.set(x + (si-0.5)*0.07, 0.78, z);
-    steam.userData.isSteam = true;
-    steam.userData.offset = si * Math.PI;
-    scene.add(steam);
-  }
-}
-makeCup(-0.5, 1.6, 0xf0e0d0);
-makeCup( 0.5, 1.6, 0xe8d0c0);
-
-// Snack bowl
-const bowl = cyl(0.22, 0.15, 0.1, 16, 0xd06040);
-bowl.position.set(0, 0.52, 1.6);
-scene.add(bowl);
-
-// ── BOOKSHELF (right wall) ────────────────────
-const shelf = box(2.2, 3.0, 0.55, 0x5a3020);
-shelf.position.set(6.5, 1.5, -3.5);
-scene.add(shelf);
-const bookColors = [0xff5555,0xff9944,0xffee44,0x44dd88,0x4499ff,0xcc44ff,0xff44cc,0x44ffee];
-for (let row = 0; row < 3; row++) {
-  let bx = 5.55;
-  for (let b = 0; b < 5; b++) {
-    const bw = 0.22 + Math.random()*0.15;
-    const bh = 0.55 + Math.random()*0.3;
-    const book = box(bw, bh, 0.4, bookColors[(row*5+b)%8]);
-    book.position.set(bx + bw/2, 0.4 + row*0.9, -3.5);
-    scene.add(book);
-    bx += bw + 0.03;
-  }
-}
-
-// ── FLOOR LAMP (left side) ────────────────────
-const lampPole = cyl(0.04, 0.04, 3.5, 8, 0x8a6070);
-lampPole.position.set(-5.5, 1.75, -4.0);
-scene.add(lampPole);
-const lampShade = cyl(0.55, 0.25, 0.7, 12, 0xffd090, 0xffbb44, 0.4);
-lampShade.position.set(-5.5, 3.65, -4.0);
-scene.add(lampShade);
-const lampBase = cyl(0.3, 0.35, 0.12, 12, 0x6a4050);
-lampBase.position.set(-5.5, 0.06, -4.0);
-scene.add(lampBase);
-
-// ── PLANTS (right side) ───────────────────────
-function makePlant(px, pz) {
-  const pot = cyl(0.22, 0.18, 0.38, 10, 0xcc7040);
-  pot.position.set(px, 0.19, pz);
-  scene.add(pot);
-  for (let i = 0; i < 7; i++) {
-    const leaf = sphere(0.18 + Math.random()*0.12, 6, 0x228822 + Math.floor(Math.random()*0x112200));
-    leaf.position.set(
-      px + (Math.random()-0.5)*0.38,
-      0.55 + Math.random()*0.5,
-      pz + (Math.random()-0.5)*0.38
-    );
-    leaf.scale.y = 0.7;
-    scene.add(leaf);
-  }
-}
-makePlant(5.8, 1.5);
-makePlant(6.5, 2.5);
-
-// ── CHARACTERS ───────────────────────────────
-// Character builder
-function makeCharacter(x, z, skinColor, hairColor, shirtColor, pantsColor, isSister) {
-  const group = new THREE.Group();
-
-  // Legs
-  [-0.16, 0.16].forEach(ox => {
-    const leg = box(0.22, 0.72, 0.22, pantsColor);
-    leg.position.set(ox, 0.36, 0);
-    leg.castShadow = true;
-    group.add(leg);
-    // shoe
-    const shoe = box(0.22, 0.1, 0.3, 0x222222);
-    shoe.position.set(ox, 0.0, 0.05);
-    group.add(shoe);
-  });
-
-  // Torso
-  const torso = box(0.55, 0.75, 0.34, shirtColor);
-  torso.position.set(0, 0.985, 0);
-  torso.castShadow = true;
-  group.add(torso);
-
-  // Sister dress detail
-  if (isSister) {
-    const skirt = new THREE.Mesh(
-      new THREE.ConeGeometry(0.42, 0.5, 12),
-      new THREE.MeshStandardMaterial({ color: shirtColor })
-    );
-    skirt.position.set(0, 0.55, 0);
-    skirt.rotation.x = Math.PI;
-    group.add(skirt);
-  }
-
-  // Arms
-  [-0.39, 0.39].forEach((ox, i) => {
-    const arm = box(0.18, 0.62, 0.18, skinColor);
-    arm.position.set(ox, 0.92, 0);
-    arm.castShadow = true;
-    arm.userData.isArm = true;
-    arm.userData.side = i === 0 ? -1 : 1;
-    group.add(arm);
-    // hand
-    const hand = sphere(0.11, 6, skinColor);
-    hand.position.set(ox, 0.61, 0);
-    group.add(hand);
-  });
-
-  // Neck
-  const neck = cyl(0.1, 0.1, 0.18, 8, skinColor);
-  neck.position.set(0, 1.44, 0);
-  group.add(neck);
-
-  // Head
-  const head = sphere(0.32, 12, skinColor);
-  head.position.set(0, 1.82, 0);
-  head.castShadow = true;
-  group.add(head);
-
-  // Hair
-  const hair = sphere(0.345, 12, hairColor);
-  hair.position.set(0, 1.88, 0);
-  hair.scale.y = 0.75;
-  group.add(hair);
-
-  // Long hair for sister
-  if (isSister) {
-    const longHair = box(0.62, 0.6, 0.12, hairColor);
-    longHair.position.set(0, 1.55, -0.12);
-    group.add(longHair);
-  }
-
-  // Eyes
-  [-0.11, 0.11].forEach(ox => {
-    const eye = sphere(0.055, 6, 0x111122);
-    eye.position.set(ox, 1.83, 0.29);
-    group.add(eye);
-    const eyeShine = sphere(0.022, 4, 0xffffff);
-    eyeShine.position.set(ox+0.02, 1.845, 0.34);
-    group.add(eyeShine);
-  });
-
-  // Smile
-  const smileMat = new THREE.LineBasicMaterial({ color: 0x552222 });
-  const smilePoints = [];
-  for (let a = 0; a <= Math.PI; a += Math.PI/8) {
-    smilePoints.push(new THREE.Vector3(Math.cos(a)*0.1, 1.71 + Math.sin(a)*0.04, 0.295));
-  }
-  const smileGeo = new THREE.BufferGeometry().setFromPoints(smilePoints);
-  const smile = new THREE.Line(smileGeo, smileMat);
-  group.add(smile);
-
-  // Eyebrows (happy/raised)
-  [-0.11, 0.11].forEach(ox => {
-    const brow = box(0.1, 0.025, 0.025, 0x331111);
-    brow.position.set(ox, 1.90, 0.3);
-    brow.rotation.z = ox < 0 ? 0.25 : -0.25;
-    group.add(brow);
-  });
-
-  // Blush cheeks for sister
-  if (isSister) {
-    [-0.19, 0.19].forEach(ox => {
-      const blush = sphere(0.07, 6, 0xff9999, 0xff5555, 0.3);
-      blush.position.set(ox, 1.76, 0.3);
-      blush.scale.z = 0.3;
-      group.add(blush);
-    });
-  }
-
-  group.position.set(x, 0, z);
-  scene.add(group);
-  return group;
-}
-
-// Sibling 1 (you - sitting left)
-const char1 = makeCharacter(-1.3, -0.1, 0xd4956a, 0x3a1a08, 0x4488cc, 0x334466, false);
-char1.rotation.y = 0.3;
-
-// Sibling 2 (sister - sitting right)
-const char2 = makeCharacter(1.3, -0.1, 0xe8aa80, 0x5a1a15, 0xff60a0, 0x882255, true);
-char2.rotation.y = -0.3;
-
-// Sit both
-char1.position.y = 0.28;
-char2.position.y = 0.28;
-
-// ── LIGHTING ─────────────────────────────────
-// Ambient
-const ambient = new THREE.AmbientLight(0x3a1040, 0.9);
-scene.add(ambient);
-
-// Warm room light
-const roomLight = new THREE.PointLight(0xffaa55, 1.4, 18);
-roomLight.position.set(0, 6, 0);
-roomLight.castShadow = true;
-scene.add(roomLight);
-
-// Lamp glow
-const lampLight = new THREE.PointLight(0xffcc66, 1.8, 6);
-lampLight.position.set(-5.5, 3.5, -4.0);
-scene.add(lampLight);
-
-// Window moonlight
-const moonLight = new THREE.SpotLight(0x9999ff, 0.7, 15, Math.PI/7, 0.5);
-moonLight.position.set(0, 5, -5);
-moonLight.target.position.set(0, 0, 0);
-scene.add(moonLight);
-scene.add(moonLight.target);
-
-// Character fill lights
-const fillL = new THREE.PointLight(0xff80c8, 0.8, 5);
-fillL.position.set(-2, 2.5, 1);
-scene.add(fillL);
-const fillR = new THREE.PointLight(0xffb3e0, 0.8, 5);
-fillR.position.set(2, 2.5, 1);
-scene.add(fillR);
-
-// ── FLOATING STAR PARTICLES ───────────────────
-const starParticles = [];
-for (let i = 0; i < 60; i++) {
-  const s = sphere(0.03, 4, 0xffffff, 0xffffff, 2);
-  s.position.set(
-    (Math.random()-0.5)*14,
-    0.5 + Math.random()*7,
-    (Math.random()-0.5)*10
-  );
-  s.userData.floatSpeed = 0.003 + Math.random()*0.005;
-  s.userData.floatOffset = Math.random()*Math.PI*2;
+// ── Window ──
+const winFrame = box(2.6,2.6,0.15,0x5a3040); winFrame.position.set(0,4,-5.82); scene.add(winFrame);
+const winGlass = box(2.2,2.2,0.05,0x88ccff,0x88ccff,0.35); winGlass.position.set(0,4,-5.80); scene.add(winGlass);
+const moon = sph(0.38,16,0xfffbe8,0xfffbe8,1.8); moon.position.set(0.5,4.55,-5.75); scene.add(moon);
+for (let i=0;i<30;i++) {
+  const s = sph(0.022,5,0xffffff,0xffffff,2.5);
+  s.position.set((Math.random()-0.5)*2.1, 3.2+Math.random()*1.7, -5.77);
   scene.add(s);
-  starParticles.push(s);
 }
 
-// ── ORBIT CONTROLS (manual) ──────────────────
-let isDragging = false;
-let prevMouse = { x: 0, y: 0 };
-let cameraAngle = { theta: 0, phi: 0.35 };
-let cameraRadius = 9;
+// ── String lights ──
+for (let i=-6;i<=6;i+=0.65) {
+  const b = sph(0.065,6,0xffeeaa,0xffeeaa,2.8);
+  b.position.set(i, 7.62, -4+Math.sin(i*1.2)*0.5);
+  scene.add(b);
+}
 
-renderer.domElement.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
-renderer.domElement.addEventListener('mouseup',   () => { isDragging = false; });
-renderer.domElement.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  const dx = (e.clientX - prevMouse.x) * 0.008;
-  const dy = (e.clientY - prevMouse.y) * 0.006;
-  cameraAngle.theta -= dx;
-  cameraAngle.phi = Math.max(0.05, Math.min(1.1, cameraAngle.phi + dy));
-  prevMouse = { x: e.clientX, y: e.clientY };
-});
-renderer.domElement.addEventListener('wheel', e => {
-  cameraRadius = Math.max(4, Math.min(18, cameraRadius + e.deltaY * 0.012));
-});
-// Touch support
-renderer.domElement.addEventListener('touchstart', e => {
-  isDragging = true;
-  prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-});
-renderer.domElement.addEventListener('touchend', () => { isDragging = false; });
-renderer.domElement.addEventListener('touchmove', e => {
-  if (!isDragging) return;
-  const dx = (e.touches[0].clientX - prevMouse.x) * 0.008;
-  const dy = (e.touches[0].clientY - prevMouse.y) * 0.006;
-  cameraAngle.theta -= dx;
-  cameraAngle.phi = Math.max(0.05, Math.min(1.1, cameraAngle.phi + dy));
-  prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+// ── Wall hearts (left) ──
+function wallHeart(px,py,pz,sz,col) {
+  const m = new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:0.55});
+  const g = new THREE.TorusGeometry(sz*0.3,sz*0.12,8,12,Math.PI);
+  const l1=new THREE.Mesh(g,m); l1.position.set(px-sz*0.3,py,pz); l1.rotation.z=Math.PI; scene.add(l1);
+  const l2=new THREE.Mesh(g,m); l2.position.set(px+sz*0.3,py,pz); l2.rotation.z=Math.PI; scene.add(l2);
+  const tip=new THREE.Mesh(new THREE.ConeGeometry(sz*0.42,sz*0.6,4),m);
+  tip.position.set(px,py-sz*0.45,pz); tip.rotation.z=Math.PI/4; scene.add(tip);
+}
+wallHeart(-6.5,4.5,-1,  0.52,0xff4499);
+wallHeart(-6.5,3.2, 1,  0.36,0xff80c8);
+wallHeart( 6.5,4.5,-1.5,0.44,0xff6eb0);
+
+// ── Photo frames ──
+function frame(x,y,z,col) {
+  const f=box(1.1,1.4,0.08,0x6b3a50); f.position.set(x,y,z); scene.add(f);
+  const p=box(0.85,1.1,0.05,col,col,0.18); p.position.set(x,y,z+0.02); scene.add(p);
+}
+frame(-3.2,4.8,-5.78,0xffd6e8);
+frame(-1.8,4.8,-5.78,0xffaad4);
+frame( 1.8,4.8,-5.78,0xffc8e8);
+frame( 3.2,4.8,-5.78,0xffecc0);
+
+// ── Sofa ──
+const sofaBase = box(4.4,0.55,1.85,0x7a2050); sofaBase.position.set(0,0.275,-0.3); sofaBase.castShadow=true; scene.add(sofaBase);
+const sofaBack = box(4.4,1.15,0.46,0x8a2860); sofaBack.position.set(0,1.1,-1.17); sofaBack.castShadow=true; scene.add(sofaBack);
+const sofaAL = box(0.44,0.78,1.85,0x8a2860); sofaAL.position.set(-2.32,0.39,-0.3); scene.add(sofaAL);
+const sofaAR = box(0.44,0.78,1.85,0x8a2860); sofaAR.position.set( 2.32,0.39,-0.3); scene.add(sofaAR);
+// Cushions
+[0xff80c8,0xffb3e0,0xcc60a8,0xee80c0].forEach((c,i) => {
+  const cu = box(0.78,0.42,0.72,c); cu.position.set(-1.4+i*0.9, 0.76,-0.72);
+  cu.rotation.y=(Math.random()-0.5)*0.28; scene.add(cu);
 });
 
-// ── CHAT BUBBLE SEQUENCER ─────────────────────
-const bubbles = [
-  { id: 'bubble1', showAt: 2,  hideAt: 8  },
-  { id: 'bubble2', showAt: 5,  hideAt: 11 },
-  { id: 'bubble3', showAt: 9,  hideAt: 15 },
-  { id: 'bubble4', showAt: 12, hideAt: 18 },
-  { id: 'bubble5', showAt: 16, hideAt: 22 },
-  { id: 'bubble6', showAt: 19, hideAt: 25 },
+// ── Coffee table ──
+const tbl = box(2.3,0.12,1.15,0x5a3030); tbl.position.set(0,0.45,1.65); scene.add(tbl);
+[[-0.92,1.12],[0.92,1.12],[-0.92,2.14],[0.92,2.14]].forEach(([tx,tz]) => {
+  const l=box(0.1,0.45,0.1,0x4a2020); l.position.set(tx,0.22,tz); scene.add(l);
+});
+
+// ── Tea cups ──
+const steamMeshes = [];
+function makeCup(x,z,col) {
+  const cup = cyl(0.1,0.08,0.18,12,col);   cup.position.set(x,0.57,z); scene.add(cup);
+  const liq = cyl(0.09,0.09,0.04,12,0x7b3810); liq.position.set(x,0.65,z); scene.add(liq);
+  const sau = cyl(0.16,0.13,0.03,12,0xe8d8c8); sau.position.set(x,0.50,z); scene.add(sau);
+  for (let s=0;s<3;s++) {
+    const st=box(0.022,0.18,0.022,0xffffff,0xffffff,1.8);
+    st.position.set(x+(s-1)*0.06, 0.79, z);
+    st.userData.isSteam=true; st.userData.off=s*1.1;
+    scene.add(st); steamMeshes.push(st);
+  }
+}
+makeCup(-0.52,1.65,0xf0e0d0);
+makeCup( 0.52,1.65,0xffc8d8);
+const snack = cyl(0.23,0.16,0.11,16,0xd06040); snack.position.set(0,0.52,1.65); scene.add(snack);
+
+// ── Bookshelf ──
+const shelf=box(2.2,3.0,0.55,0x5a3020); shelf.position.set(6.5,1.5,-3.5); scene.add(shelf);
+const bkC=[0xff5555,0xff9944,0xffee44,0x44dd88,0x4499ff,0xcc44ff,0xff44cc,0x44ffee];
+for (let row=0;row<3;row++) {
+  let bx=5.55;
+  for (let b=0;b<5;b++) {
+    const bw=0.22+Math.random()*0.15, bh=0.55+Math.random()*0.3;
+    const bk=box(bw,bh,0.4,bkC[(row*5+b)%8]);
+    bk.position.set(bx+bw/2, 0.4+row*0.9,-3.5); scene.add(bk); bx+=bw+0.03;
+  }
+}
+
+// ── Floor lamp ──
+const lpole=cyl(0.04,0.04,3.5,8,0x8a6070); lpole.position.set(-5.5,1.75,-4.0); scene.add(lpole);
+const lshade=cyl(0.58,0.26,0.72,12,0xffd090,0xffbb44,0.5); lshade.position.set(-5.5,3.65,-4.0); scene.add(lshade);
+const lbase=cyl(0.3,0.35,0.12,12,0x6a4050); lbase.position.set(-5.5,0.06,-4.0); scene.add(lbase);
+
+// ── Plants ──
+function plant(px,pz) {
+  const pot=cyl(0.22,0.18,0.38,10,0xcc7040); pot.position.set(px,0.19,pz); scene.add(pot);
+  for (let i=0;i<7;i++) {
+    const lf=sph(0.18+Math.random()*0.12,6,0x228822);
+    lf.position.set(px+(Math.random()-.5)*.38, .55+Math.random()*.5, pz+(Math.random()-.5)*.38);
+    lf.scale.y=0.7; scene.add(lf);
+  }
+}
+plant(5.8,1.5); plant(6.5,2.5);
+
+
+// ══════════════════════════════════════════════
+//  TWO SISTERS  (both fully feminine)
+// ══════════════════════════════════════════════
+function makeSister(x, z, skinCol, hairCol, dressCol, hairStyle, blushCol) {
+  const g = new THREE.Group();
+
+  // ── Legs (hidden under dress, just peep out) ──
+  [-0.13, 0.13].forEach(ox => {
+    const leg = box(0.2,0.55,0.2,skinCol); leg.position.set(ox,0.28,0); g.add(leg);
+    const shoe = box(0.2,0.09,0.28,0x222233); shoe.position.set(ox,0.0,0.06); g.add(shoe);
+  });
+
+  // ── Dress body ──
+  const bodice = box(0.54,0.58,0.32,dressCol); bodice.position.set(0,0.92,0); g.add(bodice);
+
+  // ── Dress skirt (flared cone) ──
+  const skirt = new THREE.Mesh(
+    new THREE.ConeGeometry(0.58,0.7,14),
+    new THREE.MeshStandardMaterial({ color: dressCol })
+  );
+  skirt.position.set(0,0.52,0); skirt.rotation.x=Math.PI; g.add(skirt);
+
+  // Skirt frill (slightly wider, lighter)
+  const frill = new THREE.Mesh(
+    new THREE.ConeGeometry(0.68,0.18,14),
+    new THREE.MeshStandardMaterial({ color: new THREE.Color(dressCol).offsetHSL(0,0,0.15) })
+  );
+  frill.position.set(0,0.21,0); frill.rotation.x=Math.PI; g.add(frill);
+
+  // ── Arms ──
+  [-0.38, 0.38].forEach((ox, i) => {
+    const arm = box(0.17,0.6,0.17,skinCol);
+    arm.position.set(ox,0.9,0);
+    arm.userData.isArm = true;
+    arm.userData.side = i===0 ? -1 : 1;
+    g.add(arm);
+    const hand = sph(0.1,7,skinCol); hand.position.set(ox,0.6,0); g.add(hand);
+  });
+
+  // ── Neck ──
+  const neck = cyl(0.1,0.1,0.18,8,skinCol); neck.position.set(0,1.38,0); g.add(neck);
+
+  // ── Head ──
+  const head = sph(0.32,12,skinCol); head.position.set(0,1.78,0); head.castShadow=true; g.add(head);
+
+  // ── Hair base ──
+  const hairTop = sph(0.355,12,hairCol); hairTop.position.set(0,1.86,0); hairTop.scale.y=0.72; g.add(hairTop);
+
+  // ── Long flowing hair (back curtains) ──
+  const hairBack = box(0.64,0.72,0.13,hairCol); hairBack.position.set(0,1.5,-0.13); g.add(hairBack);
+  const hairSL = box(0.2,0.55,0.15,hairCol); hairSL.position.set(-0.3,1.55,0.0); hairSL.rotation.z=0.15; g.add(hairSL);
+  const hairSR = box(0.2,0.55,0.15,hairCol); hairSR.position.set( 0.3,1.55,0.0); hairSR.rotation.z=-0.15; g.add(hairSR);
+
+  // Hair style variation
+  if (hairStyle === 'bun') {
+    const bun = sph(0.16,8,hairCol); bun.position.set(0,2.1,0); g.add(bun);
+    const bunPin = cyl(0.018,0.018,0.28,6,0xffaacc); bunPin.position.set(0,2.1,0); bunPin.rotation.z=0.5; g.add(bunPin);
+  } else if (hairStyle === 'ponytail') {
+    const pony = box(0.18,0.5,0.14,hairCol); pony.position.set(0,1.35,-0.22); pony.rotation.x=0.3; g.add(pony);
+    const band = cyl(0.14,0.14,0.06,10,0xff55aa); band.position.set(0,1.57,-0.16); band.rotation.x=0.3; g.add(band);
+  }
+
+  // ── Eyes ──
+  [-0.11,0.11].forEach(ox => {
+    // White of eye
+    const ew = sph(0.065,8,0xfff5f5); ew.position.set(ox,1.8,0.285); g.add(ew);
+    // Iris
+    const eye = sph(0.05,7,0x3a1a0a); eye.position.set(ox,1.8,0.3); g.add(eye);
+    // Pupil
+    const pup = sph(0.028,6,0x111111); pup.position.set(ox,1.8,0.325); g.add(pup);
+    // Shine
+    const sh = sph(0.018,5,0xffffff); sh.position.set(ox+0.018,1.812,0.335); g.add(sh);
+  });
+
+  // ── Eyelashes (small bars) ──
+  [-0.11,0.11].forEach(ox => {
+    for (let li=-1;li<=1;li++) {
+      const lash=box(0.012,0.045,0.012,0x1a0a00);
+      lash.position.set(ox+li*0.03, 1.838, 0.305);
+      lash.rotation.z=li*0.18;
+      g.add(lash);
+    }
+  });
+
+  // ── Smile (happy curve) ──
+  const smPts=[];
+  for (let a=0;a<=Math.PI;a+=Math.PI/8)
+    smPts.push(new THREE.Vector3(Math.cos(a)*0.1, 1.695+Math.sin(a)*0.045, 0.295));
+  const smile=new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(smPts),
+    new THREE.LineBasicMaterial({color:0x552222})
+  );
+  g.add(smile);
+
+  // ── Eyebrows (raised, happy) ──
+  [-0.11,0.11].forEach(ox => {
+    const brow=box(0.1,0.024,0.024,0x3a1a0a);
+    brow.position.set(ox,1.885,0.305);
+    brow.rotation.z=ox<0?0.28:-0.28;
+    g.add(brow);
+  });
+
+  // ── Blush cheeks ──
+  [-0.19,0.19].forEach(ox => {
+    const bl = sph(0.075,7,blushCol,blushCol,0.35);
+    bl.position.set(ox,1.75,0.29); bl.scale.z=0.32; g.add(bl);
+  });
+
+  // ── Earrings ──
+  [-0.33,0.33].forEach(ox => {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.05,0.015,6,10),
+      new THREE.MeshStandardMaterial({color:0xffcc44,emissive:0xffaa00,emissiveIntensity:0.5})
+    );
+    ring.position.set(ox,1.72,0.16); ring.rotation.y=Math.PI/2;
+    g.add(ring);
+  });
+
+  g.position.set(x,0,z);
+  scene.add(g);
+  return g;
+}
+
+// Sister 1 — older / Didi — warm skin, dark brown hair in bun, pink dress
+const sis1 = makeSister(-1.3, -0.1, 0xd4956a, 0x3a1505, 0xff70b0, 'bun',      0xff9988);
+sis1.rotation.y = 0.32;
+sis1.position.y = 0.28;
+
+// Sister 2 — younger / Choti — slightly lighter skin, reddish-brown hair ponytail, purple-pink dress
+const sis2 = makeSister( 1.3, -0.1, 0xe8aa80, 0x5c1a14, 0xd060ff, 'ponytail', 0xffaabb);
+sis2.rotation.y = -0.32;
+sis2.position.y = 0.28;
+
+
+// ══════════════════════════════════════════════
+//  LIGHTING
+// ══════════════════════════════════════════════
+scene.add(new THREE.AmbientLight(0x3a1040, 0.9));
+
+const roomLight = new THREE.PointLight(0xffaa55,1.5,20); roomLight.position.set(0,6,0); roomLight.castShadow=true; scene.add(roomLight);
+const lampLight = new THREE.PointLight(0xffcc66,1.9,7);  lampLight.position.set(-5.5,3.5,-4.0); scene.add(lampLight);
+const moonLight = new THREE.SpotLight(0x9999ff,0.7,16,Math.PI/7,0.5); moonLight.position.set(0,5,-5); moonLight.target.position.set(0,0,0); scene.add(moonLight); scene.add(moonLight.target);
+const fillL = new THREE.PointLight(0xff80c8,0.9,5); fillL.position.set(-2,2.5,1); scene.add(fillL);
+const fillR = new THREE.PointLight(0xffb3e0,0.9,5); fillR.position.set( 2,2.5,1); scene.add(fillR);
+
+
+// ══════════════════════════════════════════════
+//  FLOATING STAR PARTICLES
+// ══════════════════════════════════════════════
+const starPts = [];
+for (let i=0;i<65;i++) {
+  const s=sph(0.03,4,0xffffff,0xffffff,2.2);
+  s.position.set((Math.random()-.5)*14, .5+Math.random()*7, (Math.random()-.5)*10);
+  s.userData.fs=0.003+Math.random()*0.005; s.userData.fo=Math.random()*Math.PI*2;
+  scene.add(s); starPts.push(s);
+}
+
+
+// ══════════════════════════════════════════════
+//  ORBIT CONTROLS (mouse + touch)
+// ══════════════════════════════════════════════
+let isDrag=false, prevM={x:0,y:0};
+let camA={theta:0, phi:0.35}, camR=9;
+
+renderer.domElement.addEventListener('mousedown', e=>{isDrag=true; prevM={x:e.clientX,y:e.clientY};});
+renderer.domElement.addEventListener('mouseup',   ()=>isDrag=false);
+renderer.domElement.addEventListener('mousemove', e=>{
+  if(!isDrag)return;
+  camA.theta-=(e.clientX-prevM.x)*0.008;
+  camA.phi=Math.max(0.05,Math.min(1.1,camA.phi+(e.clientY-prevM.y)*0.006));
+  prevM={x:e.clientX,y:e.clientY};
+});
+renderer.domElement.addEventListener('wheel',e=>{ camR=Math.max(4,Math.min(18,camR+e.deltaY*0.012)); });
+renderer.domElement.addEventListener('touchstart',e=>{isDrag=true;prevM={x:e.touches[0].clientX,y:e.touches[0].clientY};});
+renderer.domElement.addEventListener('touchend',()=>isDrag=false);
+renderer.domElement.addEventListener('touchmove',e=>{
+  if(!isDrag)return;
+  camA.theta-=(e.touches[0].clientX-prevM.x)*0.008;
+  camA.phi=Math.max(0.05,Math.min(1.1,camA.phi+(e.touches[0].clientY-prevM.y)*0.006));
+  prevM={x:e.touches[0].clientX,y:e.touches[0].clientY};
+});
+
+
+// ══════════════════════════════════════════════
+//  CHAT BUBBLE SEQUENCER
+// ══════════════════════════════════════════════
+const bubbleDefs = [
+  {id:'b1',showAt:2, hideAt:8 },
+  {id:'b2',showAt:5, hideAt:11},
+  {id:'b3',showAt:9, hideAt:15},
+  {id:'b4',showAt:12,hideAt:18},
+  {id:'b5',showAt:16,hideAt:22},
+  {id:'b6',showAt:19,hideAt:25},
 ];
+const bubbleVisible = {};   // track previous visibility to trigger pop sound
 
-let elapsedTime = 0;
-let bubbleCycle = 0;
+// ══════════════════════════════════════════════
+//  LAUGH BURST EMITTER (DOM floaties)
+// ══════════════════════════════════════════════
+let laughTimer = 0;
+const laughWords = ['hahaha!!','hihi 😄','lol 😂','hehe~','😭😭','ayeee!','LOL!!'];
+function spawnLaughBurst(charGroup) {
+  const pos = new THREE.Vector3(); charGroup.getWorldPosition(pos); pos.y+=2.2;
+  pos.project(camera);
+  const hw=window.innerWidth/2, hh=window.innerHeight/2;
+  const sx=(pos.x*hw)+hw, sy=-(pos.y*hh)+hh;
+  const el=document.createElement('div');
+  el.className='laugh-burst';
+  el.style.left=(sx-20+( Math.random()-0.5)*60)+'px';
+  el.style.top =(sy+10)+'px';
+  el.textContent=laughWords[Math.floor(Math.random()*laughWords.length)];
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1300);
+}
 
-// ── ANIMATION LOOP ────────────────────────────
+
+// ══════════════════════════════════════════════
+//  MAIN ANIMATION LOOP
+// ══════════════════════════════════════════════
 const clock = new THREE.Clock();
-let laughPhase = 0;
-let heartSpawnTimer = 0;
+let elapsed=0, laugh=0, heartTimer=0;
 
 function animate() {
   requestAnimationFrame(animate);
-  if (!animStarted) { renderer.render(scene, camera); return; }
+  if (!animStarted) { renderer.render(scene,camera); return; }
 
   const dt = clock.getDelta();
-  elapsedTime += dt;
-  laughPhase += dt;
-  heartSpawnTimer += dt;
+  elapsed += dt; laugh += dt;
+  heartTimer += dt; laughTimer += dt; chimeTimer += dt;
 
-  // Spawn hearts
-  if (heartSpawnTimer > 0.35) {
-    spawnHeart();
-    heartSpawnTimer = 0;
+  // Hearts
+  if (heartTimer > 0.32) { spawnHeart(); heartTimer=0; }
+  // Chime every ~2 hearts
+  if (chimeTimer > 0.65) { playChime(); chimeTimer=0; }
+
+  // Periodic laugh sounds & burst text
+  if (laughTimer > 3.8) {
+    playLaughSound();
+    spawnLaughBurst(Math.random()>0.5 ? sis1 : sis2);
+    laughTimer = 0;
   }
 
-  // Camera orbit (slow auto-rotate when not dragging)
-  if (!isDragging) {
-    cameraAngle.theta += 0.003;
-  }
-  const cx = cameraRadius * Math.sin(cameraAngle.theta) * Math.cos(cameraAngle.phi);
-  const cy = cameraRadius * Math.sin(cameraAngle.phi) + 1.5;
-  const cz = cameraRadius * Math.cos(cameraAngle.theta) * Math.cos(cameraAngle.phi);
-  camera.position.set(cx, cy, cz);
-  camera.lookAt(0, 1.2, 0);
+  // Camera orbit
+  if (!isDrag) camA.theta += 0.0025;
+  const cx = camR*Math.sin(camA.theta)*Math.cos(camA.phi);
+  const cy = camR*Math.sin(camA.phi)+1.5;
+  const cz = camR*Math.cos(camA.theta)*Math.cos(camA.phi);
+  camera.position.set(cx,cy,cz);
+  camera.lookAt(0,1.2,0);
 
-  // Laugh animation — characters bob and lean
-  const laughBob = Math.sin(laughPhase * 3.5) * 0.06;
-  const laughLean1 = Math.sin(laughPhase * 2.8 + 0.5) * 0.12;
-  const laughLean2 = Math.sin(laughPhase * 3.1 - 0.4) * 0.12;
+  // ── Sister animations ──
+  const bob1 = Math.sin(laugh*3.5)*0.065;
+  const bob2 = Math.sin(laugh*3.1+1.0)*0.065;
+  sis1.position.y = 0.28 + bob1;
+  sis2.position.y = 0.28 + bob2;
+  sis1.rotation.z = Math.sin(laugh*2.8+0.5)*0.13;
+  sis2.rotation.z = Math.sin(laugh*3.2-0.4)*0.13;
+  sis1.rotation.y = 0.32+Math.sin(laugh*1.5)*0.12;
+  sis2.rotation.y =-0.32+Math.sin(laugh*1.7)*0.12;
 
-  char1.position.y = 0.28 + laughBob;
-  char2.position.y = 0.28 + laughBob * 0.8;
-  char1.rotation.z = laughLean1;
-  char2.rotation.z = laughLean2;
-
-  // Characters look at each other (head bob)
-  char1.rotation.y = 0.3 + Math.sin(laughPhase * 1.5) * 0.1;
-  char2.rotation.y = -0.3 + Math.sin(laughPhase * 1.7) * 0.1;
-
-  // Arm wave animation
-  char1.children.forEach(c => {
-    if (c.userData.isArm) {
-      c.rotation.z = c.userData.side * (Math.sin(laughPhase * 2.5) * 0.35 + 0.2);
-    }
+  // Arm wave
+  sis1.children.forEach(c=>{
+    if(c.userData.isArm) c.rotation.z = c.userData.side*(Math.sin(laugh*2.6)*0.38+0.22);
   });
-  char2.children.forEach(c => {
-    if (c.userData.isArm) {
-      c.rotation.z = c.userData.side * (Math.sin(laughPhase * 2.8 + 1) * 0.35 + 0.2);
-    }
+  sis2.children.forEach(c=>{
+    if(c.userData.isArm) c.rotation.z = c.userData.side*(Math.sin(laugh*2.9+0.9)*0.38+0.22);
   });
 
-  // Steam animation
-  scene.traverse(obj => {
-    if (obj.userData.isSteam) {
-      const t = elapsedTime * 2 + obj.userData.offset;
-      obj.position.y = obj.position.y + Math.sin(t) * 0.0005;
-      obj.material.opacity = 0.3 + Math.abs(Math.sin(t * 0.5)) * 0.4;
-      obj.material.transparent = true;
-    }
+  // Steam
+  steamMeshes.forEach(st=>{
+    const t=elapsed*2.1+st.userData.off;
+    st.position.y += Math.sin(t)*0.0006;
+    st.material.opacity=0.28+Math.abs(Math.sin(t*0.5))*0.45;
+    st.material.transparent=true;
   });
 
-  // Floating star particles
-  starParticles.forEach(s => {
-    s.position.y += Math.sin(elapsedTime * s.userData.floatSpeed * 6 + s.userData.floatOffset) * 0.003;
-    s.rotation.y += 0.01;
+  // Stars float
+  starPts.forEach(s=>{
+    s.position.y+=Math.sin(elapsed*s.userData.fs*6+s.userData.fo)*0.003;
+    s.rotation.y+=0.009;
   });
 
-  // Lamp light flicker
-  lampLight.intensity = 1.7 + Math.sin(elapsedTime * 4.3) * 0.08;
+  // Moon gentle bob
+  moon.position.y = 4.55 + Math.sin(elapsed*0.4)*0.04;
 
-  // Room light warm pulse
-  roomLight.intensity = 1.4 + Math.sin(elapsedTime * 0.7) * 0.15;
-
-  // Fill light color shift (warm pink pulse)
-  const hue = (elapsedTime * 0.05) % 1;
-  const fillColor = new THREE.Color().setHSL(0.88 + Math.sin(elapsedTime*0.3)*0.05, 0.9, 0.7);
-  fillL.color.copy(fillColor);
-  fillR.color.copy(fillColor);
+  // Lights pulse
+  lampLight.intensity = 1.85+Math.sin(elapsed*4.3)*0.09;
+  roomLight.intensity = 1.5 +Math.sin(elapsed*0.7)*0.18;
+  const fc = new THREE.Color().setHSL(0.88+Math.sin(elapsed*0.3)*0.05,0.9,0.7);
+  fillL.color.copy(fc); fillR.color.copy(fc);
 
   // Chat bubbles
-  const cycleTime = elapsedTime % 26;
-  bubbles.forEach(b => {
-    const el = document.getElementById(b.id);
+  const ct = elapsed % 26;
+  bubbleDefs.forEach(b=>{
+    const el=document.getElementById(b.id);
     if (!el) return;
-    const visible = cycleTime >= b.showAt && cycleTime < b.hideAt;
-    el.style.opacity = visible ? '1' : '0';
+    const vis = ct>=b.showAt && ct<b.hideAt;
+    if (vis && !bubbleVisible[b.id]) { playPop(); }
+    bubbleVisible[b.id] = vis;
+    el.style.opacity = vis ? '1' : '0';
   });
 
-  // Name tags (project to screen)
-  projectTag('tag1', char1, camera, renderer);
-  projectTag('tag2', char2, camera, renderer);
+  // Name tags
+  projectTag('tag1',sis1); projectTag('tag2',sis2);
 
-  renderer.render(scene, camera);
+  renderer.render(scene,camera);
 }
 
-function projectTag(tagId, charGroup, cam, rend) {
-  const tag = document.getElementById(tagId);
-  if (!tag) return;
-  const pos = new THREE.Vector3();
-  charGroup.getWorldPosition(pos);
-  pos.y += 2.1;
-  pos.project(cam);
-  const hw = window.innerWidth / 2;
-  const hh = window.innerHeight / 2;
-  const sx = (pos.x * hw) + hw;
-  const sy = -(pos.y * hh) + hh;
-  if (pos.z < 1) {
-    tag.style.display = 'block';
-    tag.style.left = (sx - 25) + 'px';
-    tag.style.top  = (sy - 14) + 'px';
-  } else {
-    tag.style.display = 'none';
-  }
+function projectTag(id, grp) {
+  const tag=document.getElementById(id); if(!tag)return;
+  const pos=new THREE.Vector3(); grp.getWorldPosition(pos); pos.y+=2.25;
+  pos.project(camera);
+  const hw=window.innerWidth/2, hh=window.innerHeight/2;
+  const sx=(pos.x*hw)+hw, sy=-(pos.y*hh)+hh;
+  if (pos.z<1) { tag.style.display='block'; tag.style.left=(sx-30)+'px'; tag.style.top=(sy-14)+'px'; }
+  else tag.style.display='none';
 }
 
-// ── START ─────────────────────────────────────
+
+// ══════════════════════════════════════════════
+//  START
+// ══════════════════════════════════════════════
 function startAnimation() {
-  const titleScreen = document.getElementById('title-screen');
-  titleScreen.style.opacity = '0';
-  setTimeout(() => { titleScreen.style.display = 'none'; }, 2000);
-  animStarted = true;
+  initAudio();   // must be inside user gesture for browser autoplay policy
+  const ts=document.getElementById('title-screen');
+  ts.style.opacity='0';
+  setTimeout(()=>ts.style.display='none',2000);
+  animStarted=true;
   clock.start();
-  document.getElementById('tag1').style.display = 'block';
-  document.getElementById('tag2').style.display = 'block';
+  document.getElementById('tag1').style.display='block';
+  document.getElementById('tag2').style.display='block';
 }
 
 animate();
